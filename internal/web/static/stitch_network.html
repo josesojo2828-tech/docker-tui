@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-secondary":"#003640","surface-container":"#1c2028","on-tertiary-fixed":"#2a1700","surface-container-high":"#262a33","inverse-on-surface":"#2c3039","on-tertiary-container":"#523200","secondary":"#4cd7f6","surface-bright":"#353942","surface-tint":"#4edea3","outline":"#86948a","tertiary-container":"#e29100","on-primary":"#003824","primary":"#4edea3","on-primary-fixed-variant":"#005236","surface-container-low":"#181c24","outline-variant":"#3c4a42","on-secondary-container":"#00424e","primary-fixed-dim":"#4edea3","on-surface":"#dfe2ee","secondary-fixed":"#acedff","tertiary-fixed":"#ffddb8","on-background":"#dfe2ee","error":"#ffb4ab","inverse-surface":"#dfe2ee","inverse-primary":"#006c49","error-container":"#93000a","on-secondary-fixed-variant":"#004e5c","tertiary":"#ffb95f","on-surface-variant":"#bbcabf","on-error":"#690005","surface-dim":"#0f131c","on-primary-fixed":"#002113","surface-container-lowest":"#0a0e16","surface-variant":"#31353e","surface-container-highest":"#31353e","secondary-fixed-dim":"#4cd7f6","on-tertiary":"#472a00","tertiary-fixed-dim":"#ffb95f","primary-container":"#10b981","on-error-container":"#ffdad6","on-primary-container":"#00422b","on-tertiary-fixed-variant":"#653e00","surface":"#0f131c","primary-fixed":"#6ffbbe","background":"#0f131c","on-secondary-fixed":"#001f26","secondary-container":"#03b5d3"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"gutter":"0.75rem","space-sm":"0.25rem","space-lg":"0.75rem","space-xl":"1rem","gutter-md":"1rem","margin":"0.75rem","space-md":"0.5rem","margin-md":"1.25rem","space-xs":"0.125rem"},fontFamily:{"code-sm":["JetBrains Mono"],"body-md":["Inter"],"headline-sm":["Inter"],"label-sm":["JetBrains Mono"],"code-lg":["JetBrains Mono"],"body-lg":["Inter"],"headline-md":["Inter"],"label-md":["JetBrains Mono"],"headline-xl":["Inter"],"headline-xl-mobile":["Inter"],"headline-lg":["Inter"],"body-sm":["Inter"],"code-md":["JetBrains Mono"]},fontSize:{"code-sm":["0.6875rem",{"lineHeight":"1rem","letterSpacing":"0.02em","fontWeight":"400"}],"body-md":["0.875rem",{"lineHeight":"1.25rem","fontWeight":"400"}],"headline-sm":["1rem",{"lineHeight":"1.5rem","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["0.625rem",{"lineHeight":"0.875rem","letterSpacing":"0.06em","fontWeight":"600"}],"code-lg":["0.875rem",{"lineHeight":"1.25rem","fontWeight":"500"}],"body-lg":["1rem",{"lineHeight":"1.5rem","fontWeight":"400"}],"headline-md":["1.25rem",{"lineHeight":"1.75rem","letterSpacing":"-0.015em","fontWeight":"600"}],"label-md":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.05em","fontWeight":"500"}],"headline-xl":["2rem",{"lineHeight":"2.5rem","letterSpacing":"-0.025em","fontWeight":"600"}],"headline-xl-mobile":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-lg":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.02em","fontWeight":"600"}],"body-sm":["0.75rem",{"lineHeight":"1rem","fontWeight":"400"}],"code-md":["0.75rem",{"lineHeight":"1.125rem","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 h-14 bg-surface-container-lowest border-b border-surface-container-high px-gutter-md flex items-center justify-between gap-space-lg select-none"><div class="flex items-center gap-space-md shrink-0"><img alt="Docker-TUI Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UUsB7BNPVRCYggfRpB3847y-YgJGc5Ew6YXtpIzJ6aXdA6r1U4Yhbcl9BHRj0Z5n8pUjh2PEjm8ul4QnljtpYBpiwQ1LPitNj464m7ZiMDBfIuGGh8V_VC343Oekl2wEfFwqhd9biWmzb47yIaDVt8XrMd5JHdGamRDtVHhbnY_QxMzpqis8j9xOmYdb4LAU0L1m54WR5l10EVmbOmZYwRl2GOYFOnUnM_jF4qNZILNTzOAZ6F0J0Q7Ow"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-code-lg text-code-lg text-primary uppercase font-bold tracking-tight">docker-tui</span><span class="font-code-sm text-code-sm text-outline-variant">v24.0.7</span></div><div class="flex items-center gap-space-xs"><span class="h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span><span class="font-code-sm text-code-sm text-outline">daemon: unix:///var/run/docker.sock [connected]</span></div></div></div><div class="hidden xl:flex items-center gap-space-sm font-code-sm text-code-sm"><div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs border border-surface-container-high rounded"><span class="text-outline">CPU</span><span class="text-primary font-bold">14.2%</span><span class="text-outline-variant">[4/8 cores]</span></div><div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs border border-surface-container-high rounded"><span class="text-outline">MEM</span><span class="text-secondary font-bold">6.8/16 GB</span><span class="text-outline-variant">(42%)</span></div><div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs border border-surface-container-high rounded"><span class="text-outline">DISK</span><span class="text-tertiary font-bold">54.2 GB</span><span class="text-outline-variant">free</span></div></div><div class="flex items-center gap-space-md shrink-0"><div class="relative hidden md:flex items-center"><span class="material-symbols-outlined text-outline absolute left-space-md text-[16px]">terminal</span><input class="bg-surface-container-low border border-surface-container-high pl-8 pr-16 py-space-xs font-code-sm text-code-sm text-on-surface focus:outline-none focus:border-secondary w-64 rounded" placeholder="docker exec / run prompt..." type="text"/><span class="absolute right-space-sm font-code-sm text-code-sm text-outline-variant bg-surface-container-high px-space-xs rounded">Ctrl + ~</span></div><div class="relative flex items-center cursor-pointer p-space-xs hover:bg-surface-container-high rounded transition-colors"><span class="material-symbols-outlined text-on-surface text-[20px]">notifications</span><span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-primary ring-2 ring-surface-container-lowest"></span></div><div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs border border-surface-container-high rounded cursor-pointer hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-secondary text-[16px]">dns</span><span class="font-code-sm text-code-sm text-on-surface">local-node-01 (Ubuntu 22.04 LTS)</span><span class="material-symbols-outlined text-outline text-[16px]">arrow_drop_down</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><aside class="fixed left-0 top-14 bottom-0 w-64 bg-surface-container-lowest border-r border-surface-container-high z-40 flex flex-col justify-between select-none"><div class="flex flex-col py-space-md overflow-y-auto"><div class="px-space-md mb-space-xs"><span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Core Workloads</span></div><nav class="space-y-space-xs px-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold"><a class="flex items-center justify-between px-space-md py-space-xs rounded font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="containers" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">inventory_2</span><span>Containers</span></div><span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs py-space-xs rounded text-primary">18/6</span></a><a aria-current="page" class="flex items-center justify-between px-space-md py-space-xs rounded transition-colors bg-primary-container text-on-primary-container font-semibold" data-path="network-topology" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">hub</span><span>Network Topology</span></div><span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs py-space-xs rounded text-outline">4</span></a><a class="flex items-center justify-between px-space-md py-space-xs rounded font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="telemetry-resources" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">monitoring</span><span>Telemetry &amp; Resources</span></div><span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs py-space-xs rounded text-secondary">1s</span></a><a class="flex items-center justify-between px-space-md py-space-xs rounded font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="console-terminal" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">terminal</span><span>Console &amp; Terminal</span></div><span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs py-space-xs rounded text-primary">PTY</span></a></nav><div class="px-space-md mt-space-lg mb-space-xs"><span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Storage &amp; Registry</span></div><nav class="space-y-space-xs px-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold"><a class="flex items-center justify-between px-space-md py-space-xs rounded font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="images" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">layers</span><span>Images</span></div><span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs py-space-xs rounded text-outline">32</span></a><a class="flex items-center justify-between px-space-md py-space-xs rounded font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="volumes" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">storage</span><span>Volumes</span></div><span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs py-space-xs rounded text-outline">14</span></a><a class="flex items-center justify-between px-space-md py-space-xs rounded font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="compose-stacks" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[18px]">view_in_ar</span><span>Compose Stacks</span></div><span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs py-space-xs rounded text-outline">3</span></a></nav></div><div class="p-space-md border-t border-surface-container-high bg-surface-container-lowest"><div class="flex flex-col gap-space-xs font-code-sm text-code-sm text-outline mb-space-md"><div class="flex justify-between"><span>ENGINE:</span><span class="text-on-surface font-mono">v24.0.7-ce</span></div><div class="flex justify-between"><span>API:</span><span class="text-on-surface font-mono">v1.43</span></div><div class="flex justify-between"><span>CONTEXT:</span><span class="text-secondary font-mono">default</span></div></div><button class="w-full flex items-center justify-center gap-space-xs py-space-xs bg-surface-container-high hover:bg-surface-variant text-on-surface font-code-sm text-code-sm rounded border border-outline-variant transition-colors"><span class="material-symbols-outlined text-[16px] text-primary">play_arrow</span><span>QUICK EXEC [ESC]</span></button></div></aside><div class="pl-64"><main class="w-full pt-14 bg-background min-h-screen"><div class="flex flex-col w-full text-on-surface">
+<!-- Top Bar & Network Breadcrumb Telemetry Header -->
+<div class="flex flex-col gap-space-md p-space-lg bg-surface-container-lowest">
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs font-code-sm text-code-sm text-primary">
+<span class="material-symbols-outlined text-[15px]">hub</span>
+<span class="tracking-widest uppercase">NET_ENGINE :: TOPOLOGY_GRAPH</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface-variant font-mono">veth-subnets.map</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight mt-space-xs">
+          Network Topology &amp; Service Mesh Map
+        </h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Live visualization of Docker bridge, overlay, and compose subnets with packet telemetry &amp; dual-homed endpoint routing.
+        </p>
+</div>
+<!-- Live Aggregate Throughput Badge -->
+<div class="flex items-center gap-space-md bg-surface-container-low px-space-md py-space-sm rounded">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Mesh Throughput</span>
+<div class="flex items-center gap-space-xs">
+<span class="font-code-lg text-code-lg text-secondary font-bold">4.82 MB/s</span>
+<span class="material-symbols-outlined text-primary text-[14px]">south_east</span>
+<span class="font-code-sm text-code-sm text-outline font-mono">TX: 1.94 MB/s</span>
+</div>
+</div>
+<div class="h-8 w-px bg-surface-container-highest"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Active Links</span>
+<span class="font-code-lg text-code-lg text-primary font-bold">14 <span class="text-outline text-code-sm font-normal">veth pairs</span></span>
+</div>
+</div>
+</div>
+<!-- Active Networks Quick Filter Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
+<div class="flex flex-wrap items-center gap-space-xs font-code-sm text-code-sm">
+<button class="flex items-center gap-space-xs px-space-md py-space-xs bg-surface-container-high text-on-surface rounded transition-colors group">
+<span class="h-2 w-2 rounded-full bg-secondary"></span>
+<span class="font-bold">app-backend-net</span>
+<span class="text-outline-variant font-mono">(172.20.0.0/16)</span>
+<span class="bg-surface-container-lowest text-secondary px-space-xs rounded font-mono">7 ctns</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span>ingress-edge</span>
+<span class="text-outline-variant font-mono">(172.28.0.0/16)</span>
+<span class="bg-surface-container-lowest text-primary px-space-xs rounded font-mono">4 ctns</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors">
+<span class="h-2 w-2 rounded-full bg-tertiary"></span>
+<span>bridge [default]</span>
+<span class="text-outline-variant font-mono">(172.17.0.0/16)</span>
+<span class="bg-surface-container-lowest text-outline px-space-xs rounded font-mono">3 ctns</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-space-xs bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded transition-colors">
+<span class="h-2 w-2 rounded-full bg-outline"></span>
+<span>host</span>
+<span class="text-outline-variant font-mono">(host-driver)</span>
+<span class="bg-surface-container-lowest text-outline px-space-xs rounded font-mono">2 ctns</span>
+</button>
+</div>
+<!-- Action Controls and Switches -->
+<div class="flex items-center gap-space-xs font-code-sm text-code-sm">
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs rounded text-on-surface-variant">
+<span class="material-symbols-outlined text-[15px] text-secondary">alt_route</span>
+<span>Auto-Layout</span>
+<span class="text-secondary font-bold font-mono">[ON]</span>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-low px-space-md py-space-xs rounded text-on-surface-variant">
+<span class="material-symbols-outlined text-[15px] text-primary">lan</span>
+<span>IP Labels</span>
+<span class="text-primary font-bold font-mono">[ON]</span>
+</div>
+<button class="flex items-center gap-space-xs bg-primary text-on-primary px-space-md py-space-xs rounded font-label-md text-label-md font-bold uppercase transition-all hover:bg-primary-fixed">
+<span class="material-symbols-outlined text-[16px]">add_circle</span>
+<span>Create Network</span>
+<span class="text-on-primary-container font-mono">[+n]</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Canvas Stage with Split Inspector Layout -->
+<div class="flex flex-col lg:flex-row w-full flex-grow relative overflow-hidden bg-surface-container-lowest">
+<!-- Graph Viewport Canvas Area -->
+<div class="relative flex-1 min-h-[760px] bg-surface-container-lowest overflow-hidden select-none">
+<!-- Ambient Coordinate Grid Overlay (SVG) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="24" id="dotGrid" patternunits="userSpaceOnUse" width="24">
+<circle cx="2" cy="2" fill="#4edea3" opacity="0.35" r="1"></circle>
+</pattern>
+</defs>
+<rect fill="url(#dotGrid)" height="100%" width="100%"></rect>
+</svg>
+<!-- SVG Vector Connections Overlay (Bézier curves + Animated packet flow dots) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<!-- Cyber Cyan Glow filter -->
+<filter height="140%" id="glow-cyan" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="blur" stddeviation="3"></fegaussianblur>
+<fecomposite in="SourceGraphic" in2="blur" operator="over"></fecomposite>
+</filter>
+<filter height="140%" id="glow-emerald" width="140%" x="-20%" y="-20%">
+<fegaussianblur result="blur" stddeviation="3"></fegaussianblur>
+<fecomposite in="SourceGraphic" in2="blur" operator="over"></fecomposite>
+</filter>
+</defs>
+<!-- Dynamic Connection Paths -->
+<!-- Ingress Hub (X:140, Y:130) -> Traefik (X:360, Y:130) -->
+<path d="M 190 140 C 275 140, 275 140, 360 140" fill="none" opacity="0.8" stroke="#4edea3" stroke-dasharray="6,4" stroke-width="2"></path>
+<circle cx="275" cy="140" fill="#4edea3" filter="url(#glow-emerald)" r="3.5">
+<animate attributename="cx" dur="1.8s" from="190" repeatcount="indefinite" to="360"></animate>
+</circle>
+<!-- Ingress Hub (X:140, Y:130) -> Cert-Manager (X:360, Y:40) -->
+<path d="M 190 140 C 275 140, 275 55, 360 55" fill="none" opacity="0.5" stroke="#4edea3" stroke-dasharray="4,4" stroke-width="1.5"></path>
+<!-- Traefik (Dual-Homed) -> Backend Hub (X:470, Y:390) -->
+<path d="M 440 180 C 440 280, 480 280, 480 340" fill="none" filter="url(#glow-cyan)" opacity="0.9" stroke="#4cd7f6" stroke-dasharray="8,4" stroke-width="2.5"></path>
+<circle cx="460" cy="260" fill="#acedff" filter="url(#glow-cyan)" r="4">
+<animate attributename="cy" dur="1.2s" from="180" repeatcount="indefinite" to="340"></animate>
+</circle>
+<!-- Backend Hub (X:470, Y:390) -> API Gateway (X:680, Y:220) -->
+<path d="M 540 370 C 610 370, 610 240, 680 240" fill="none" opacity="0.85" stroke="#4cd7f6" stroke-dasharray="5,3" stroke-width="2"></path>
+<circle cx="610" cy="305" fill="#4cd7f6" r="3.5">
+<animate attributename="cx" dur="2.4s" repeatcount="indefinite" values="540;680;540"></animate>
+<animate attributename="cy" dur="2.4s" repeatcount="indefinite" values="370;240;370"></animate>
+</circle>
+<!-- Backend Hub (X:470, Y:390) -> Redis (X:680, Y:330) -->
+<path d="M 540 390 C 610 390, 610 345, 680 345" fill="none" opacity="0.75" stroke="#4cd7f6" stroke-dasharray="6,4" stroke-width="2"></path>
+<circle cx="610" cy="365" fill="#4cd7f6" r="3">
+<animate attributename="cx" dur="1.4s" from="540" repeatcount="indefinite" to="680"></animate>
+</circle>
+<!-- Backend Hub (X:470, Y:390) -> Postgres Primary (X:680, Y:440) -->
+<path d="M 540 405 C 610 405, 610 455, 680 455" fill="none" filter="url(#glow-cyan)" opacity="0.9" stroke="#4cd7f6" stroke-width="2.5"></path>
+<circle cx="610" cy="430" fill="#4edea3" r="4">
+<animate attributename="cx" dur="1.7s" repeatcount="indefinite" values="680;540;680"></animate>
+<animate attributename="cy" dur="1.7s" repeatcount="indefinite" values="455;405;455"></animate>
+</circle>
+<!-- Backend Hub (X:470, Y:390) -> Payment Worker (X:680, Y:550) -->
+<path d="M 540 420 C 610 420, 610 565, 680 565" fill="none" opacity="0.6" stroke="#4cd7f6" stroke-dasharray="4,4" stroke-width="1.5"></path>
+<!-- Bridge Hub (X:140, Y:610) -> Portainer Agent (X:360, Y:570) -->
+<path d="M 190 610 C 275 610, 275 585, 360 585" fill="none" opacity="0.6" stroke="#ffb95f" stroke-dasharray="5,5" stroke-width="1.5"></path>
+<!-- Bridge Hub (X:140, Y:610) -> Node Exporter (X:360, Y:675) -->
+<path d="M 190 625 C 275 625, 275 690, 360 690" fill="none" opacity="0.6" stroke="#ffb95f" stroke-dasharray="5,5" stroke-width="1.5"></path>
+</svg>
+<!-- Viewport Floating Telemetry HUD -->
+<div class="absolute top-space-md left-space-md z-20 flex items-center gap-space-sm bg-surface-container-low px-space-md py-space-xs rounded shadow-md">
+<span class="font-code-sm text-code-sm text-outline font-mono">GRID:</span>
+<span class="font-code-sm text-code-sm text-on-surface font-bold font-mono">24px :: SCALE 100%</span>
+<span class="text-outline-variant">|</span>
+<span class="font-code-sm text-code-sm text-primary font-mono animate-pulse">● VETH DAEMON SYNCED</span>
+</div>
+<div class="absolute top-space-md right-space-md z-20 flex items-center gap-space-xs bg-surface-container-low p-space-xs rounded shadow-md">
+<button class="p-space-xs hover:bg-surface-container-high rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Zoom in">
+<span class="material-symbols-outlined text-[18px]">zoom_in</span>
+</button>
+<button class="p-space-xs hover:bg-surface-container-high rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Zoom out">
+<span class="material-symbols-outlined text-[18px]">zoom_out</span>
+</button>
+<button class="p-space-xs hover:bg-surface-container-high rounded text-on-surface-variant hover:text-on-surface transition-colors" title="Fit to View">
+<span class="material-symbols-outlined text-[18px]">fit_screen</span>
+</button>
+</div>
+<!-- ============================================== -->
+<!-- CANVAS INTERACTIVE NODES & HUBS                -->
+<!-- ============================================== -->
+<!-- HUB 1: ingress-edge -->
+<div class="absolute left-8 top-24 z-20 w-44 bg-surface-container-high p-space-md rounded shadow-lg transition-transform hover:scale-105 cursor-pointer">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">router</span>
+<span class="font-code-sm text-code-sm text-primary font-bold tracking-tight">INGRESS_EDGE</span>
+</div>
+<span class="h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+</div>
+<div class="font-code-sm text-code-sm text-on-surface font-mono">172.28.0.1/16</div>
+<div class="mt-space-xs flex justify-between font-label-sm text-label-sm text-outline font-mono">
+<span>DRV: bridge</span>
+<span class="text-primary font-bold">4 veth</span>
+</div>
+</div>
+<!-- CONTAINER: cert-manager (Under Ingress) -->
+<div class="absolute left-[360px] top-6 z-20 w-56 bg-surface-container-low p-space-md rounded shadow-md hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs truncate">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span class="font-code-sm text-code-sm text-on-surface font-bold truncate">cert-manager</span>
+</div>
+<span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs rounded text-outline-variant">ctn</span>
+</div>
+<div class="font-code-sm text-code-sm text-secondary font-mono">172.28.0.3</div>
+<div class="mt-space-xs flex items-center justify-between text-outline">
+<span class="font-label-sm text-label-sm font-mono">PORTS: none</span>
+<span class="font-code-sm text-code-sm text-primary font-mono">up 4d</span>
+</div>
+</div>
+<!-- CONTAINER: traefik-proxy-01 (DUAL HOMED) -->
+<div class="absolute left-[360px] top-28 z-20 w-64 bg-surface-container p-space-md rounded shadow-xl transition-all">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="h-2.5 w-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-code-sm text-code-sm text-on-surface font-bold">traefik-proxy-01</span>
+</div>
+<span class="font-label-sm text-label-sm bg-secondary text-on-secondary px-space-xs rounded uppercase font-bold">dual-homed</span>
+</div>
+<div class="space-y-space-xs font-code-sm text-code-sm font-mono">
+<div class="flex justify-between text-on-surface-variant">
+<span class="text-primary">eth0 (edge):</span>
+<span class="text-on-surface">172.28.0.2</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span class="text-secondary">eth1 (app):</span>
+<span class="text-on-surface">172.20.0.2</span>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs bg-surface-container-low px-space-sm py-space-xs rounded flex items-center justify-between">
+<div class="flex gap-space-xs font-code-sm text-code-sm">
+<span class="bg-surface-container-high px-space-xs rounded text-primary font-mono">80:80</span>
+<span class="bg-surface-container-high px-space-xs rounded text-primary font-mono">443:443</span>
+</div>
+<span class="font-code-sm text-code-sm text-secondary font-mono font-bold">2.4 MB/s</span>
+</div>
+</div>
+<!-- HUB 2: app-backend-net (SELECTED HUB - HIGHLIGHTED) -->
+<div class="absolute left-[370px] top-[340px] z-30 w-52 bg-surface-container-high p-space-md rounded shadow-2xl transition-transform transform scale-105 cursor-pointer">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">hub</span>
+<span class="font-code-sm text-code-sm text-secondary font-bold tracking-tight">APP-BACKEND-NET</span>
+</div>
+<span class="h-2.5 w-2.5 rounded-full bg-secondary animate-ping"></span>
+</div>
+<div class="font-code-lg text-code-lg text-on-surface font-mono font-bold">172.20.0.1/16</div>
+<div class="mt-space-xs flex justify-between font-label-sm text-label-sm text-on-surface-variant font-mono">
+<span class="text-secondary font-bold">ICC: ENABLED</span>
+<span class="text-on-surface font-bold">7 endpoints</span>
+</div>
+<div class="mt-space-xs text-[10px] bg-secondary text-on-secondary px-space-xs py-space-xs rounded font-bold uppercase tracking-wider text-center">
+          Active Inspector Target
+        </div>
+</div>
+<!-- BACKEND CONTAINERS ROW / CLUSTER -->
+<!-- 1. api-gateway-v2 -->
+<div class="absolute left-[680px] top-[200px] z-20 w-60 bg-surface-container-low p-space-md rounded shadow-md hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs truncate">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span class="font-code-sm text-code-sm text-on-surface font-bold truncate">api-gateway-v2</span>
+</div>
+<span class="font-code-sm text-code-sm text-outline-variant font-mono">#b2891</span>
+</div>
+<div class="flex justify-between items-center font-code-sm text-code-sm font-mono">
+<span class="text-secondary font-bold">172.20.0.3</span>
+<span class="bg-surface-container-high px-space-xs rounded text-primary">8080:8080</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between text-outline font-code-sm text-code-sm">
+<span>TX: 810 KB/s</span>
+<span class="text-primary font-mono">cpu 12%</span>
+</div>
+</div>
+<!-- 2. redis-cache -->
+<div class="absolute left-[680px] top-[305px] z-20 w-60 bg-surface-container-low p-space-md rounded shadow-md hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs truncate">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span class="font-code-sm text-code-sm text-on-surface font-bold truncate">redis-cache</span>
+</div>
+<span class="font-code-sm text-code-sm text-outline-variant font-mono">#84f1a</span>
+</div>
+<div class="flex justify-between items-center font-code-sm text-code-sm font-mono">
+<span class="text-secondary font-bold">172.20.0.5</span>
+<span class="bg-surface-container-high px-space-xs rounded text-outline">6379/tcp</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between text-outline font-code-sm text-code-sm">
+<span>TX: 180 KB/s</span>
+<span class="text-secondary font-mono">hit 98.4%</span>
+</div>
+</div>
+<!-- 3. postgres-primary -->
+<div class="absolute left-[680px] top-[410px] z-20 w-60 bg-surface-container p-space-md rounded shadow-lg hover:bg-surface-container-high transition-all">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs truncate">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span class="font-code-sm text-code-sm text-on-surface font-bold truncate">postgres-primary</span>
+</div>
+<span class="font-label-sm text-label-sm bg-tertiary-container text-on-tertiary-container px-space-xs rounded font-bold">STATEFUL</span>
+</div>
+<div class="flex justify-between items-center font-code-sm text-code-sm font-mono">
+<span class="text-secondary font-bold">172.20.0.4</span>
+<span class="bg-surface-container-high px-space-xs rounded text-tertiary">5432:5432</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between text-outline font-code-sm text-code-sm">
+<span>TX: 450 KB/s</span>
+<span class="text-primary font-mono">conn: 34</span>
+</div>
+</div>
+<!-- 4. payment-worker -->
+<div class="absolute left-[680px] top-[515px] z-20 w-60 bg-surface-container-low p-space-md rounded shadow-md hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs truncate">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span class="font-code-sm text-code-sm text-on-surface font-bold truncate">payment-worker</span>
+</div>
+<span class="font-code-sm text-code-sm text-outline-variant font-mono">#c7391</span>
+</div>
+<div class="flex justify-between items-center font-code-sm text-code-sm font-mono">
+<span class="text-secondary font-bold">172.20.0.6</span>
+<span class="text-outline font-mono">internal</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between text-outline font-code-sm text-code-sm">
+<span>TX: 42 KB/s</span>
+<span class="text-outline font-mono">batch loop</span>
+</div>
+</div>
+<!-- HUB 3: default bridge (SYSTEM CORE) -->
+<div class="absolute left-8 top-[590px] z-20 w-44 bg-surface-container-high p-space-md rounded shadow-lg transition-transform hover:scale-105 cursor-pointer">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[18px]">share</span>
+<span class="font-code-sm text-code-sm text-tertiary font-bold tracking-tight">BRIDGE_SYS</span>
+</div>
+<span class="h-2 w-2 rounded-full bg-tertiary"></span>
+</div>
+<div class="font-code-sm text-code-sm text-on-surface font-mono">172.17.0.1/16</div>
+<div class="mt-space-xs flex justify-between font-label-sm text-label-sm text-outline font-mono">
+<span>DRV: bridge</span>
+<span class="text-tertiary font-bold">3 veth</span>
+</div>
+</div>
+<!-- BRIDGE CONTAINERS -->
+<!-- portainer-agent -->
+<div class="absolute left-[360px] top-[560px] z-20 w-56 bg-surface-container-low p-space-md rounded shadow-md hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs truncate">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span class="font-code-sm text-code-sm text-on-surface font-bold truncate">portainer-agent</span>
+</div>
+<span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs rounded text-outline-variant">sys</span>
+</div>
+<div class="flex justify-between items-center font-code-sm text-code-sm font-mono">
+<span class="text-on-surface">172.17.0.2</span>
+<span class="bg-surface-container-high px-space-xs rounded text-outline">9001:9001</span>
+</div>
+</div>
+<!-- prometheus-node-exporter -->
+<div class="absolute left-[360px] top-[655px] z-20 w-56 bg-surface-container-low p-space-md rounded shadow-md hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-space-xs truncate">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span class="font-code-sm text-code-sm text-on-surface font-bold truncate">node-exporter</span>
+</div>
+<span class="font-code-sm text-code-sm bg-surface-container-high px-space-xs rounded text-outline-variant">metric</span>
+</div>
+<div class="flex justify-between items-center font-code-sm text-code-sm font-mono">
+<span class="text-on-surface">172.17.0.3</span>
+<span class="bg-surface-container-high px-space-xs rounded text-outline">9100:9100</span>
+</div>
+</div>
+</div>
+<!-- Right Side: Comprehensive Network Inspector Dock -->
+<div class="w-full lg:w-[380px] bg-surface-container-low flex flex-col justify-between shrink-0 overflow-y-auto">
+<div class="flex flex-col p-space-md gap-space-md">
+<!-- Inspector Card Header -->
+<div class="flex items-center justify-between bg-surface-container px-space-md py-space-sm rounded">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">lan</span>
+<span class="font-code-lg text-code-lg text-secondary font-bold">NETWORK INSPECTOR</span>
+</div>
+<span class="font-code-sm text-code-sm bg-secondary text-on-secondary font-bold px-space-xs rounded">LOCAL</span>
+</div>
+<!-- Selected Network Core Meta -->
+<div class="bg-surface-container-lowest p-space-md rounded space-y-space-xs font-code-sm text-code-sm">
+<div class="flex justify-between items-center">
+<span class="text-outline">NAME:</span>
+<span class="text-secondary font-bold font-mono">app-backend-net</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-outline">NETWORK ID:</span>
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface font-mono">a49f81bc20de4</span>
+<button class="text-outline hover:text-secondary" title="Copy ID">
+<span class="material-symbols-outlined text-[13px]">content_copy</span>
+</button>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-outline">DRIVER:</span>
+<span class="text-primary font-mono font-bold">bridge</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-outline">SCOPE:</span>
+<span class="text-on-surface font-mono">local (compose)</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-outline">SUBNET:</span>
+<span class="text-on-surface font-mono">172.20.0.0/16</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-outline">GATEWAY:</span>
+<span class="text-secondary font-mono">172.20.0.1</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-outline">MTU:</span>
+<span class="text-on-surface font-mono">1500</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-outline">INTERNAL:</span>
+<span class="text-outline-variant font-mono">false</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-outline">ENABLE ICC:</span>
+<span class="text-primary font-mono font-bold">true</span>
+</div>
+</div>
+<!-- Connected Containers List -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Connected Endpoints (7)</span>
+<span class="font-code-sm text-code-sm text-secondary font-mono font-bold">1.2 MB/s AVG</span>
+</div>
+<div class="space-y-space-xs">
+<!-- Item 1: Traefik -->
+<div class="bg-surface-container-lowest p-space-sm rounded hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs font-code-sm text-code-sm">
+<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+<span class="font-bold text-on-surface font-mono">traefik-proxy-01</span>
+</div>
+<button class="text-error hover:bg-error-container hover:text-on-error-container px-space-xs rounded text-[11px] font-mono transition-colors">
+                  DETACH
+                </button>
+</div>
+<div class="flex justify-between text-outline text-[11px] font-mono mt-space-xs">
+<span>IP: 172.20.0.2</span>
+<span class="text-on-surface-variant">02:42:ac:14:00:02</span>
+</div>
+<div class="flex justify-between text-outline text-[10px] font-mono mt-space-xs">
+<span class="text-primary">TX: 840 KB/s</span>
+<span class="text-secondary">RX: 1.2 MB/s</span>
+</div>
+</div>
+<!-- Item 2: Postgres Primary -->
+<div class="bg-surface-container-lowest p-space-sm rounded hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs font-code-sm text-code-sm">
+<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+<span class="font-bold text-on-surface font-mono">postgres-primary</span>
+</div>
+<button class="text-error hover:bg-error-container hover:text-on-error-container px-space-xs rounded text-[11px] font-mono transition-colors">
+                  DETACH
+                </button>
+</div>
+<div class="flex justify-between text-outline text-[11px] font-mono mt-space-xs">
+<span>IP: 172.20.0.4</span>
+<span class="text-on-surface-variant">02:42:ac:14:00:04</span>
+</div>
+<div class="flex justify-between text-outline text-[10px] font-mono mt-space-xs">
+<span class="text-primary">TX: 450 KB/s</span>
+<span class="text-secondary">RX: 210 KB/s</span>
+</div>
+</div>
+<!-- Item 3: API Gateway -->
+<div class="bg-surface-container-lowest p-space-sm rounded hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs font-code-sm text-code-sm">
+<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+<span class="font-bold text-on-surface font-mono">api-gateway-v2</span>
+</div>
+<button class="text-error hover:bg-error-container hover:text-on-error-container px-space-xs rounded text-[11px] font-mono transition-colors">
+                  DETACH
+                </button>
+</div>
+<div class="flex justify-between text-outline text-[11px] font-mono mt-space-xs">
+<span>IP: 172.20.0.3</span>
+<span class="text-on-surface-variant">02:42:ac:14:00:03</span>
+</div>
+<div class="flex justify-between text-outline text-[10px] font-mono mt-space-xs">
+<span class="text-primary">TX: 620 KB/s</span>
+<span class="text-secondary">RX: 410 KB/s</span>
+</div>
+</div>
+<!-- Item 4: Redis Cache -->
+<div class="bg-surface-container-lowest p-space-sm rounded hover:bg-surface-container transition-colors">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs font-code-sm text-code-sm">
+<span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
+<span class="font-bold text-on-surface font-mono">redis-cache</span>
+</div>
+<button class="text-error hover:bg-error-container hover:text-on-error-container px-space-xs rounded text-[11px] font-mono transition-colors">
+                  DETACH
+                </button>
+</div>
+<div class="flex justify-between text-outline text-[11px] font-mono mt-space-xs">
+<span>IP: 172.20.0.5</span>
+<span class="text-on-surface-variant">02:42:ac:14:00:05</span>
+</div>
+<div class="flex justify-between text-outline text-[10px] font-mono mt-space-xs">
+<span class="text-primary">TX: 180 KB/s</span>
+<span class="text-secondary">RX: 90 KB/s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Network Quick Diagnostics Box -->
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Subnet Ping &amp; DNS Probe</span>
+<span class="font-code-sm text-code-sm text-primary font-mono font-bold">READY</span>
+</div>
+<div class="relative flex items-center mt-space-xs">
+<span class="absolute left-space-md text-outline font-mono text-[12px]">$</span>
+<input class="w-full bg-surface-container-high pl-6 pr-12 py-space-xs font-code-sm text-code-sm text-on-surface rounded focus:outline-none focus:ring-1 focus:ring-secondary font-mono" type="text" value="docker run --rm -it --net app-backend-net alpine ping -c 3 172.20.0.4"/>
+<button class="absolute right-space-xs bg-primary text-on-primary px-space-xs py-space-xs rounded font-code-sm text-code-sm font-bold hover:bg-primary-fixed">
+              RUN
+            </button>
+</div>
+<div class="bg-surface-container-high p-space-xs rounded mt-space-xs font-code-sm text-code-sm font-mono text-outline-variant space-y-space-xs">
+<div><span class="text-primary">64 bytes</span> from 172.20.0.4: seq=1 ttl=64 time=0.082 ms</div>
+<div><span class="text-primary">64 bytes</span> from 172.20.0.4: seq=2 ttl=64 time=0.075 ms</div>
+<div class="text-secondary">3 packets transmitted, 3 received, 0% packet loss</div>
+</div>
+</div>
+</div>
+<!-- Inspector Footer Action Bar -->
+<div class="p-space-md bg-surface-container-lowest flex items-center justify-between gap-space-sm">
+<button class="flex-1 flex items-center justify-center gap-space-xs py-space-xs bg-surface-container-high hover:bg-surface-variant text-on-surface rounded font-code-sm text-code-sm font-bold transition-colors">
+<span class="material-symbols-outlined text-[16px] text-secondary">cable</span>
+<span>CONNECT CTN</span>
+</button>
+<button class="flex items-center justify-center p-space-xs bg-error-container hover:bg-error text-on-error-container hover:text-on-error rounded transition-colors" title="Prune or Purge Network">
+<span class="material-symbols-outlined text-[18px]">delete_forever</span>
+</button>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

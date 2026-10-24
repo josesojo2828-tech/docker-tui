@@ -5,6 +5,7 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/fs"
 	"net/http"
 	"strings"
@@ -33,10 +34,26 @@ func NewServer(port int, dockerSvc *docker.Service) *Server {
 
 	mux := http.NewServeMux()
 
-	// Static assets
+	// Static assets and pages
 	sub, err := fs.Sub(staticFS, "static")
 	if err == nil {
-		mux.Handle("/", http.FileServer(http.FS(sub)))
+		fileServer := http.FileServer(http.FS(sub))
+		mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
+		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			path := r.URL.Path
+			switch path {
+			case "/", "/index.html", "/containers":
+				serveStaticFile(w, sub, "stitch_containers.html")
+			case "/network", "/network-topology":
+				serveStaticFile(w, sub, "stitch_network.html")
+			case "/telemetry", "/telemetry-resources":
+				serveStaticFile(w, sub, "stitch_telemetry.html")
+			case "/console", "/console-terminal":
+				serveStaticFile(w, sub, "stitch_console.html")
+			default:
+				fileServer.ServeHTTP(w, r)
+			}
+		})
 	}
 
 	// API Routes
@@ -69,6 +86,20 @@ func (s *Server) Shutdown(ctx context.Context) error {
 // Addr returns the listening address
 func (s *Server) Addr() string {
 	return s.addr
+}
+
+func serveStaticFile(w http.ResponseWriter, fs fs.FS, filename string) {
+	data, err := fs.Open(filename)
+	if err != nil {
+		http.NotFound(w, nil)
+		return
+	}
+	defer data.Close()
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	stat, _ := data.Stat()
+	if stat != nil {
+		http.ServeContent(w, &http.Request{}, filename, stat.ModTime(), data.(io.ReadSeeker))
+	}
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
