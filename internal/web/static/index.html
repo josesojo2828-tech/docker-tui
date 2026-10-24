@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docker TUI & Web Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #e2e8f0;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #111827;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased custom-scrollbar">
+
+  <!-- Header -->
+  <header class="border-b border-gray-800 bg-gray-900/60 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/20">
+          🐳
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            Docker Dashboard
+            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 font-mono border border-blue-500/20">v1.0</span>
+          </h1>
+          <p class="text-xs text-gray-400">Panel de control y monitorización de contenedores</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-2 text-xs text-gray-400 bg-gray-800/80 px-3 py-1.5 rounded-lg border border-gray-700/60">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span id="daemon-version">Docker Engine</span>
+        </div>
+
+        <button id="refresh-btn" onclick="fetchData()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          Actualizar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+
+    <!-- KPI / Stats Summary Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="stats-container">
+      <div class="bg-gray-900/70 border border-gray-800/80 rounded-xl p-4 shadow-sm">
+        <div class="text-xs font-medium text-gray-400 uppercase tracking-wider">Total Contenedores</div>
+        <div class="mt-2 text-2xl font-bold text-white font-mono" id="stat-total">-</div>
+        <div class="text-xs text-gray-500 mt-1">Registrados</div>
+      </div>
+
+      <div class="bg-gray-900/70 border border-emerald-900/30 rounded-xl p-4 shadow-sm">
+        <div class="text-xs font-medium text-emerald-400 uppercase tracking-wider">En Ejecución</div>
+        <div class="mt-2 text-2xl font-bold text-emerald-400 font-mono" id="stat-running">-</div>
+        <div class="text-xs text-gray-500 mt-1">Activos ahora</div>
+      </div>
+
+      <div class="bg-gray-900/70 border border-amber-900/30 rounded-xl p-4 shadow-sm">
+        <div class="text-xs font-medium text-amber-400 uppercase tracking-wider">Detenidos / Pausa</div>
+        <div class="mt-2 text-2xl font-bold text-amber-400 font-mono" id="stat-stopped">-</div>
+        <div class="text-xs text-gray-500 mt-1">Inactivos</div>
+      </div>
+
+      <div class="bg-gray-900/70 border border-gray-800/80 rounded-xl p-4 shadow-sm">
+        <div class="text-xs font-medium text-purple-400 uppercase tracking-wider">Imágenes</div>
+        <div class="mt-2 text-2xl font-bold text-purple-300 font-mono" id="stat-images">-</div>
+        <div class="text-xs text-gray-500 mt-1">En caché local</div>
+      </div>
+
+      <div class="bg-gray-900/70 border border-gray-800/80 rounded-xl p-4 shadow-sm">
+        <div class="text-xs font-medium text-cyan-400 uppercase tracking-wider">Volúmenes</div>
+        <div class="mt-2 text-2xl font-bold text-cyan-300 font-mono" id="stat-volumes">-</div>
+        <div class="text-xs text-gray-500 mt-1">Almacenamiento</div>
+      </div>
+
+      <div class="bg-gray-900/70 border border-gray-800/80 rounded-xl p-4 shadow-sm">
+        <div class="text-xs font-medium text-blue-400 uppercase tracking-wider">Redes</div>
+        <div class="mt-2 text-2xl font-bold text-blue-300 font-mono" id="stat-networks">-</div>
+        <div class="text-xs text-gray-500 mt-1">Puentes y redes</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs & Toolbar -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 border-b border-gray-800 pb-4">
+      <div class="flex space-x-2">
+        <button onclick="setTab('containers')" id="tab-btn-containers" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white shadow-sm transition">
+          Contenedores
+        </button>
+        <button onclick="setTab('volumes')" id="tab-btn-volumes" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-gray-800 transition">
+          Volúmenes
+        </button>
+        <button onclick="setTab('networks')" id="tab-btn-networks" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-200 hover:bg-gray-800 transition">
+          Redes
+        </button>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <div class="relative w-full sm:w-64">
+          <input type="text" id="filter-input" oninput="applyFilter()" placeholder="Filtrar por nombre o imagen..." 
+            class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-1.5 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-blue-500 transition">
+        </div>
+        <label class="flex items-center gap-2 text-xs text-gray-400 cursor-pointer select-none">
+          <input type="checkbox" id="show-all-chk" onchange="fetchData()" checked class="rounded border-gray-700 bg-gray-900 text-blue-600 focus:ring-0">
+          <span>Ver todos (incluidos detenidos)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Feedback Message Banner -->
+    <div id="toast" class="hidden p-3 rounded-lg text-xs font-mono transition"></div>
+
+    <!-- Containers View -->
+    <div id="tab-containers" class="tab-panel">
+      <div class="bg-gray-900/60 border border-gray-800 rounded-xl overflow-hidden shadow">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-800/60 text-gray-400 font-mono uppercase text-[11px] border-b border-gray-800">
+              <tr>
+                <th class="py-3 px-4">Estado</th>
+                <th class="py-3 px-4">Nombre</th>
+                <th class="py-3 px-4">ID</th>
+                <th class="py-3 px-4">Imagen</th>
+                <th class="py-3 px-4">Puertos</th>
+                <th class="py-3 px-4">Tiempo / Uptime</th>
+                <th class="py-3 px-4 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="containers-table-body" class="divide-y divide-gray-800 font-mono">
+              <tr>
+                <td colspan="7" class="py-8 text-center text-gray-500 font-sans">Cargando contenedores...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Volumes View -->
+    <div id="tab-volumes" class="tab-panel hidden">
+      <div class="bg-gray-900/60 border border-gray-800 rounded-xl overflow-hidden shadow">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-800/60 text-gray-400 font-mono uppercase text-[11px] border-b border-gray-800">
+              <tr>
+                <th class="py-3 px-4">Nombre del Volumen</th>
+                <th class="py-3 px-4">Driver</th>
+                <th class="py-3 px-4">Alcance (Scope)</th>
+                <th class="py-3 px-4">Punto de Montaje</th>
+              </tr>
+            </thead>
+            <tbody id="volumes-table-body" class="divide-y divide-gray-800 font-mono">
+              <tr>
+                <td colspan="4" class="py-8 text-center text-gray-500 font-sans">Cargando volúmenes...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Networks View -->
+    <div id="tab-networks" class="tab-panel hidden">
+      <div class="bg-gray-900/60 border border-gray-800 rounded-xl overflow-hidden shadow">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-800/60 text-gray-400 font-mono uppercase text-[11px] border-b border-gray-800">
+              <tr>
+                <th class="py-3 px-4">ID</th>
+                <th class="py-3 px-4">Nombre</th>
+                <th class="py-3 px-4">Driver</th>
+                <th class="py-3 px-4">Alcance</th>
+                <th class="py-3 px-4">Contenedores Conectados</th>
+              </tr>
+            </thead>
+            <tbody id="networks-table-body" class="divide-y divide-gray-800 font-mono">
+              <tr>
+                <td colspan="5" class="py-8 text-center text-gray-500 font-sans">Cargando redes...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-gray-800 py-4 text-center text-xs text-gray-500">
+    Docker TUI & Web &bull; Desarrollado en Go &bull; Auto-refresco cada 5s
+  </footer>
+
+  <script>
+    let activeTab = 'containers';
+    let allContainers = [];
+    let allVolumes = [];
+    let allNetworks = [];
+
+    function setTab(tab) {
+      activeTab = tab;
+      document.querySelectorAll('.tab-panel').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tab).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white');
+        btn.classList.add('text-gray-400', 'hover:bg-gray-800');
+      });
+      const activeBtn = document.getElementById('tab-btn-' + tab);
+      activeBtn.classList.add('bg-blue-600', 'text-white');
+      activeBtn.classList.remove('text-gray-400', 'hover:bg-gray-800');
+    }
+
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = `p-3 rounded-lg text-xs font-mono block ${isError ? 'bg-red-900/50 text-red-300 border border-red-700/60' : 'bg-emerald-900/50 text-emerald-300 border border-emerald-700/60'}`;
+      setTimeout(() => {
+        toast.className = 'hidden';
+      }, 4000);
+    }
+
+    async function fetchData() {
+      try {
+        const [sumRes, contRes, volRes, netRes] = await Promise.all([
+          fetch('/api/summary'),
+          fetch('/api/containers?all=' + document.getElementById('show-all-chk').checked),
+          fetch('/api/volumes'),
+          fetch('/api/networks')
+        ]);
+
+        if (sumRes.ok) {
+          const sum = await sumRes.json();
+          document.getElementById('stat-total').textContent = sum.total_containers;
+          document.getElementById('stat-running').textContent = sum.running_containers;
+          document.getElementById('stat-stopped').textContent = sum.stopped_containers + sum.paused_containers;
+          document.getElementById('stat-images').textContent = sum.total_images;
+          document.getElementById('stat-volumes').textContent = sum.total_volumes;
+          document.getElementById('stat-networks').textContent = sum.total_networks;
+          document.getElementById('daemon-version').textContent = 'Docker ' + sum.docker_version;
+        }
+
+        if (contRes.ok) {
+          allContainers = await contRes.json() || [];
+          renderContainers(allContainers);
+        }
+
+        if (volRes.ok) {
+          allVolumes = await volRes.json() || [];
+          renderVolumes(allVolumes);
+        }
+
+        if (netRes.ok) {
+          allNetworks = await netRes.json() || [];
+          renderNetworks(allNetworks);
+        }
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      }
+    }
+
+    function applyFilter() {
+      const q = document.getElementById('filter-input').value.toLowerCase().trim();
+      if (!q) {
+        renderContainers(allContainers);
+        return;
+      }
+      const filtered = allContainers.filter(c => 
+        c.name.toLowerCase().includes(q) || 
+        c.image.toLowerCase().includes(q) || 
+        c.id.toLowerCase().includes(q)
+      );
+      renderContainers(filtered);
+    }
+
+    function renderContainers(items) {
+      const tbody = document.getElementById('containers-table-body');
+      if (!items || items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-500 font-sans">No se encontraron contenedores</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = items.map(c => {
+        const isRunning = c.state.toLowerCase() === 'running';
+        const badgeColor = isRunning ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-gray-800 text-gray-400 border-gray-700';
+        const dotColor = isRunning ? 'bg-emerald-500' : 'bg-gray-500';
+
+        return `
+          <tr class="hover:bg-gray-800/40 transition">
+            <td class="py-3 px-4">
+              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium border ${badgeColor}">
+                <span class="w-1.5 h-1.5 rounded-full ${dotColor}"></span>
+                ${c.state}
+              </span>
+            </td>
+            <td class="py-3 px-4 font-semibold text-white">${c.name}</td>
+            <td class="py-3 px-4 text-gray-400">${c.id}</td>
+            <td class="py-3 px-4 text-gray-300 max-w-xs truncate" title="${c.image}">${c.image}</td>
+            <td class="py-3 px-4 text-gray-400 max-w-xs truncate" title="${c.ports}">${c.ports}</td>
+            <td class="py-3 px-4 text-gray-400">${c.status}</td>
+            <td class="py-3 px-4 text-right space-x-1">
+              ${isRunning ? `
+                <button onclick="containerAction('${c.full_id}', 'stop')" class="px-2 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] transition">
+                  Stop
+                </button>
+                <button onclick="containerAction('${c.full_id}', 'restart')" class="px-2 py-1 rounded bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[11px] transition">
+                  Restart
+                </button>
+              ` : `
+                <button onclick="containerAction('${c.full_id}', 'start')" class="px-2 py-1 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] transition">
+                  Start
+                </button>
+              `}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderVolumes(items) {
+      const tbody = document.getElementById('volumes-table-body');
+      if (!items || items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-gray-500 font-sans">No se encontraron volúmenes</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = items.map(v => `
+        <tr class="hover:bg-gray-800/40 transition">
+          <td class="py-3 px-4 font-medium text-white max-w-xs truncate" title="${v.name}">${v.name}</td>
+          <td class="py-3 px-4 text-gray-400">${v.driver}</td>
+          <td class="py-3 px-4 text-gray-400">${v.scope}</td>
+          <td class="py-3 px-4 text-gray-400 max-w-md truncate" title="${v.mountpoint}">${v.mountpoint}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderNetworks(items) {
+      const tbody = document.getElementById('networks-table-body');
+      if (!items || items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-gray-500 font-sans">No se encontraron redes</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = items.map(n => `
+        <tr class="hover:bg-gray-800/40 transition">
+          <td class="py-3 px-4 text-gray-400">${n.id}</td>
+          <td class="py-3 px-4 font-medium text-white">${n.name}</td>
+          <td class="py-3 px-4 text-gray-400">${n.driver}</td>
+          <td class="py-3 px-4 text-gray-400">${n.scope}</td>
+          <td class="py-3 px-4 text-gray-300">${n.containers_count} contenedores</td>
+        </tr>
+      `).join('');
+    }
+
+    async function containerAction(id, action) {
+      try {
+        const res = await fetch(`/api/containers/${id}/${action}`, { method: 'POST' });
+        const result = await res.json();
+        if (res.ok) {
+          showToast(`Acción "${action}" completada con éxito.`);
+          fetchData();
+        } else {
+          showToast(`Error: ${result.error || 'falló la acción'}`, true);
+        }
+      } catch (err) {
+        showToast(`Error al procesar: ${err.message}`, true);
+      }
+    }
+
+    // Initial fetch & interval
+    fetchData();
+    setInterval(fetchData, 5000);
+  </script>
+</body>
+</html>
