@@ -44,17 +44,17 @@ type Model struct {
 	volumesTable    table.Model
 	networksTable   table.Model
 
-	summary         *docker.SystemSummary
-	containersData  []docker.ContainerItem
-	volumesData     []docker.VolumeItem
-	networksData    []docker.NetworkItem
+	summary        *docker.SystemSummary
+	containersData []docker.ContainerItem
+	volumesData    []docker.VolumeItem
+	networksData   []docker.NetworkItem
 
-	width           int
-	height          int
-	statusMsg       string
-	isErrorStatus   bool
-	loading         bool
-	webPort         int
+	width         int
+	height        int
+	statusMsg     string
+	isErrorStatus bool
+	loading       bool
+	webPort       int
 }
 
 // NewModel creates an initialized TUI model

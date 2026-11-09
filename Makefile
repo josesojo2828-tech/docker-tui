@@ -2,7 +2,7 @@ APP_NAME := docker-tui
 BIN_DIR := bin
 CMD_PATH := ./cmd/docker-tui
 
-.PHONY: all build run run-web clean tidy
+.PHONY: all build run run-tui run-web test clean tidy
 
 all: build
 
@@ -14,8 +14,14 @@ build:
 run: build
 	./$(BIN_DIR)/$(APP_NAME)
 
+run-tui: build
+	./$(BIN_DIR)/$(APP_NAME) tui
+
 run-web: build
-	./$(BIN_DIR)/$(APP_NAME) -web-only
+	./$(BIN_DIR)/$(APP_NAME) web
+
+test:
+	go test ./...
 
 tidy:
 	go mod tidy

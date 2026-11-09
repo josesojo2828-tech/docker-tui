@@ -1,10 +1,15 @@
 # Binaries
 bin/
+/docker-tui
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
+
+# Editor backups
+*.bak
+*.backup
 
 # Test binary, built with `go test -c`
 *.test

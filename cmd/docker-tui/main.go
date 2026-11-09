@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -18,10 +19,25 @@ import (
 )
 
 func main() {
-	port := flag.Int("port", 8080, "Puerto para el servidor web dashboard")
-	noWeb := flag.Bool("no-web", false, "Desactivar servidor web dashboard")
-	webOnly := flag.Bool("web-only", false, "Ejecutar únicamente el dashboard web (sin interfaz TUI)")
-	flag.Parse()
+	mode, rest, err := parseArgs(os.Args[1:])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "❌ %v\n\n", err)
+		usage()
+		os.Exit(2)
+	}
+
+	fs := flag.NewFlagSet("docker-tui", flag.ExitOnError)
+	port := fs.Int("port", 8080, "Puerto para el servidor web dashboard")
+	noWeb := fs.Bool("no-web", false, "Desactivar servidor web dashboard")
+	webOnly := fs.Bool("web-only", false, "Ejecutar únicamente el dashboard web (sin interfaz TUI)")
+	fs.Parse(rest)
+
+	switch mode {
+	case "web":
+		*webOnly = true
+	case "tui":
+		*noWeb = true
+	}
 
 	// Initialize Docker Service
 	dockerSvc, err := docker.NewService()
@@ -81,4 +97,38 @@ func main() {
 		defer cancel()
 		_ = webServer.Shutdown(ctx)
 	}
+}
+
+// parseArgs resolves the optional subcommand and returns the remaining
+// arguments for the flag parser. Flags may come before the subcommand so the
+// previous CLI keeps working.
+func parseArgs(args []string) (mode string, rest []string, err error) {
+	if len(args) == 0 || strings.HasPrefix(args[0], "-") {
+		return "all", args, nil
+	}
+
+	switch args[0] {
+	case "all", "tui", "web":
+		return args[0], args[1:], nil
+	default:
+		return "", nil, fmt.Errorf("comando desconocido: %q", args[0])
+	}
+}
+
+func usage() {
+	fmt.Print(`docker-tui — Docker TUI & Web Dashboard
+
+Uso:
+  docker-tui [all|tui|web] [flags]
+
+Comandos:
+  all    TUI + dashboard web (por defecto)
+  tui    Solo interfaz de terminal
+  web    Solo dashboard web
+
+Flags:
+  -port int      Puerto del dashboard web (por defecto 8080)
+  -no-web        Desactivar el dashboard web
+  -web-only      Ejecutar solo el dashboard web
+`)
 }

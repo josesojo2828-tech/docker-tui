@@ -85,6 +85,21 @@ go run ./cmd/docker-tui
 ./bin/docker-tui -no-web
 ```
 
+### 3. Subcomandos
+
+```bash
+# TUI + dashboard web (por defecto)
+./bin/docker-tui all
+
+# Solo la TUI
+./bin/docker-tui tui
+
+# Solo el dashboard web
+./bin/docker-tui web -port 8080
+```
+
+Los flags anteriores siguen funcionando: `-web-only` equivale a `web` y `-no-web` equivale a `tui`.
+
 ---
 
 ## ⌨️ Controles de Teclado (TUI)
