@@ -44,12 +44,10 @@ func NewServer(port int, dockerSvc *docker.Service) *Server {
 			switch path {
 			case "/", "/index.html", "/containers":
 				serveStaticFile(w, sub, "stitch_containers.html")
-			case "/network", "/network-topology":
-				serveStaticFile(w, sub, "stitch_network.html")
-			case "/telemetry", "/telemetry-resources":
-				serveStaticFile(w, sub, "stitch_telemetry.html")
-			case "/console", "/console-terminal":
-				serveStaticFile(w, sub, "stitch_console.html")
+			case "/images":
+				serveStaticFile(w, sub, "stitch_images.html")
+			case "/volumes":
+				serveStaticFile(w, sub, "stitch_volumes.html")
 			default:
 				fileServer.ServeHTTP(w, r)
 			}
@@ -60,6 +58,7 @@ func NewServer(port int, dockerSvc *docker.Service) *Server {
 	mux.HandleFunc("/api/summary", s.handleSummary)
 	mux.HandleFunc("/api/containers", s.handleContainers)
 	mux.HandleFunc("/api/containers/", s.handleContainerAction)
+	mux.HandleFunc("/api/images", s.handleImages)
 	mux.HandleFunc("/api/volumes", s.handleVolumes)
 	mux.HandleFunc("/api/networks", s.handleNetworks)
 
@@ -182,6 +181,19 @@ func (s *Server) handleContainerAction(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, map[string]string{"status": "ok", "action": action, "id": containerID})
+}
+
+func (s *Server) handleImages(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	images, err := s.dockerSvc.ListImages(r.Context())
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return
+	}
+	writeJSON(w, http.StatusOK, images)
 }
 
 func (s *Server) handleVolumes(w http.ResponseWriter, r *http.Request) {

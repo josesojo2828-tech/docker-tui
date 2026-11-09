@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/image"
 	"github.com/docker/docker/api/types/network"
@@ -152,8 +153,104 @@ func (s *Service) ListContainers(ctx context.Context, all bool) ([]ContainerItem
 	return items, nil
 }
 
-// ListVolumes returns all volumes
+// FormatBytes formats byte sizes into human readable units
+func FormatBytes(b int64) string {
+	if b < 0 {
+		return "N/A"
+	}
+	const unit = 1024
+	if b < unit {
+		return fmt.Sprintf("%d B", b)
+	}
+	div, exp := int64(unit), 0
+	for n := b / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "KMGTPE"[exp])
+}
+
+// ListImages returns images with tags, dates and formatted sizes
+func (s *Service) ListImages(ctx context.Context) ([]ImageItem, error) {
+	rawImages, err := s.cli.ImageList(ctx, image.ListOptions{All: true})
+	if err != nil {
+		return nil, fmt.Errorf("failed to list images: %w", err)
+	}
+
+	items := make([]ImageItem, 0, len(rawImages))
+	for _, img := range rawImages {
+		shortID := img.ID
+		if strings.HasPrefix(shortID, "sha256:") {
+			shortID = strings.TrimPrefix(shortID, "sha256:")
+		}
+		if len(shortID) > 12 {
+			shortID = shortID[:12]
+		}
+
+		repo := "<none>"
+		tag := "<none>"
+		if len(img.RepoTags) > 0 && img.RepoTags[0] != "<none>:<none>" {
+			parts := strings.Split(img.RepoTags[0], ":")
+			if len(parts) == 2 {
+				repo = parts[0]
+				tag = parts[1]
+			} else {
+				repo = img.RepoTags[0]
+			}
+		}
+
+		createdTime := time.Unix(img.Created, 0)
+		items = append(items, ImageItem{
+			ID:            shortID,
+			FullID:        img.ID,
+			Repository:    repo,
+			Tag:           tag,
+			Created:       createdTime,
+			CreatedStr:    createdTime.Format("2006-01-02 15:04"),
+			SizeBytes:     img.Size,
+			SizeFormatted: FormatBytes(img.Size),
+			Containers:    img.Containers,
+		})
+	}
+	return items, nil
+}
+
+// ListVolumes returns all volumes with usage data (size and ref counts)
 func (s *Service) ListVolumes(ctx context.Context) ([]VolumeItem, error) {
+	// Try DiskUsage first to fetch actual size and references
+	du, err := s.cli.DiskUsage(ctx, types.DiskUsageOptions{})
+	if err == nil && len(du.Volumes) > 0 {
+		items := make([]VolumeItem, 0, len(du.Volumes))
+		for _, v := range du.Volumes {
+			sizeBytes := int64(-1)
+			refCount := int64(0)
+			if v.UsageData != nil {
+				sizeBytes = v.UsageData.Size
+				refCount = v.UsageData.RefCount
+			}
+
+			createdAt := v.CreatedAt
+			if createdAt == "" {
+				createdAt = "-"
+			} else if t, err := time.Parse(time.RFC3339, createdAt); err == nil {
+				createdAt = t.Format("2006-01-02 15:04")
+			}
+
+			items = append(items, VolumeItem{
+				Name:          v.Name,
+				Driver:        v.Driver,
+				Scope:         v.Scope,
+				Mountpoint:    v.Mountpoint,
+				CreatedAt:     createdAt,
+				SizeBytes:     sizeBytes,
+				SizeFormatted: FormatBytes(sizeBytes),
+				RefCount:      refCount,
+			})
+		}
+		return items, nil
+	}
+
+	// Fallback to standard VolumeList
 	resp, err := s.cli.VolumeList(ctx, volume.ListOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to list volumes: %w", err)
@@ -164,13 +261,18 @@ func (s *Service) ListVolumes(ctx context.Context) ([]VolumeItem, error) {
 		createdAt := v.CreatedAt
 		if createdAt == "" {
 			createdAt = "-"
+		} else if t, err := time.Parse(time.RFC3339, createdAt); err == nil {
+			createdAt = t.Format("2006-01-02 15:04")
 		}
 		items = append(items, VolumeItem{
-			Name:       v.Name,
-			Driver:     v.Driver,
-			Scope:      v.Scope,
-			Mountpoint: v.Mountpoint,
-			CreatedAt:  createdAt,
+			Name:          v.Name,
+			Driver:        v.Driver,
+			Scope:         v.Scope,
+			Mountpoint:    v.Mountpoint,
+			CreatedAt:     createdAt,
+			SizeBytes:     -1,
+			SizeFormatted: "N/A",
+			RefCount:      0,
 		})
 	}
 	return items, nil

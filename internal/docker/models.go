@@ -8,20 +8,36 @@ type ContainerItem struct {
 	FullID    string    `json:"full_id"`
 	Name      string    `json:"name"`
 	Image     string    `json:"image"`
-	State     string    `json:"state"`   // running, exited, paused, restarting, etc.
-	Status    string    `json:"status"`  // "Up 4 hours", "Exited (0) 2 hours ago"
+	State     string    `json:"state"`  // running, exited, paused, restarting, etc.
+	Status    string    `json:"status"` // "Up 4 hours", "Exited (0) 2 hours ago"
 	Created   time.Time `json:"created"`
 	Ports     string    `json:"ports"`
 	IPAddress string    `json:"ip_address,omitempty"`
 }
 
-// VolumeItem represents a Docker volume
+// VolumeItem represents a Docker volume with size and usage metadata
 type VolumeItem struct {
-	Name       string `json:"name"`
-	Driver     string `json:"driver"`
-	Scope      string `json:"scope"`
-	Mountpoint string `json:"mountpoint"`
-	CreatedAt  string `json:"created_at"`
+	Name          string `json:"name"`
+	Driver        string `json:"driver"`
+	Scope         string `json:"scope"`
+	Mountpoint    string `json:"mountpoint"`
+	CreatedAt     string `json:"created_at"`
+	SizeBytes     int64  `json:"size_bytes"`
+	SizeFormatted string `json:"size_formatted"`
+	RefCount      int64  `json:"ref_count"`
+}
+
+// ImageItem represents a Docker image with size, tag and date metadata
+type ImageItem struct {
+	ID            string    `json:"id"`
+	FullID        string    `json:"full_id"`
+	Repository    string    `json:"repository"`
+	Tag           string    `json:"tag"`
+	Created       time.Time `json:"created"`
+	CreatedStr    string    `json:"created_str"`
+	SizeBytes     int64     `json:"size_bytes"`
+	SizeFormatted string    `json:"size_formatted"`
+	Containers    int64     `json:"containers_count"`
 }
 
 // NetworkItem represents a Docker network
