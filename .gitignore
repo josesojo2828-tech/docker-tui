@@ -1,4 +1,4 @@
-# Binaries
+# Binarios
 bin/
 /docker-tui
 *.exe
@@ -7,17 +7,22 @@ bin/
 *.so
 *.dylib
 
-# Editor backups
+# Backups de editor
 *.bak
 *.backup
 
-# Test binary, built with `go test -c`
+# Tests y cobertura
 *.test
-
-# Output of the go coverage tool
 *.out
+coverage.html
+*.prof
 
-# OS files
+# Config local y secretos
+.env
+.env.*
+!.env.example
+
+# OS
 .DS_Store
 Thumbs.db
 
@@ -25,3 +30,4 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+*.swo
